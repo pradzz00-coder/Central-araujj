@@ -1,96 +1,331 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Central ARAUJJ</title>
+  <meta charset="UTF-8" />
+  <title>Central ARAUJJ - Sistema Hacker</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
     * {
       box-sizing: border-box;
     }
 
     body {
-      background-color: #000;
-      font-family: 'Courier New', monospace;
-      color: #00ffff;
+      margin: 0;
+      height: 100vh;
+      background: #000;
+      color: #00ffea;
+      font-family: 'Share Tech Mono', monospace;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
+      justify-content: space-between;
       overflow: hidden;
+      user-select: none;
     }
 
+    /* Fundo CMatrix */
+    canvas#cmatrix {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      background: black;
+      display: block;
+    }
+
+    /* Container central */
     .terminal {
-      background-color: #111;
-      border: 2px solid #00ffff;
+      position: relative;
+      background: rgba(0, 0, 0, 0.85);
+      border: 2px solid #00ffea;
       border-radius: 15px;
-      padding: 40px;
-      box-shadow: 0 0 30px #00ffff80;
+      width: 90vw;
+      max-width: 800px;
+      padding: 30px 40px;
+      box-shadow:
+        0 0 20px #00ffea,
+        0 0 50px #00ffea80;
+      z-index: 2;
+      color: #00ffea;
       text-align: center;
-      max-width: 90%;
-      animation: glow 1.5s infinite alternate;
     }
 
-    @keyframes glow {
-      from {
-        box-shadow: 0 0 15px #00ffff;
+    /* Título com glitch */
+    h1 {
+      font-size: 2.8em;
+      position: relative;
+      margin: 0 0 10px 0;
+      color: #00ffea;
+      text-shadow:
+        0 0 8px #00ffea,
+        0 0 20px #00ffea,
+        0 0 30px #00ffea,
+        0 0 40px #00ffea;
+      user-select: none;
+    }
+
+    /* Glitch effect */
+    h1::before, h1::after {
+      content: "CENTRAL ARAUJJ";
+      position: absolute;
+      left: 0;
+      right: 0;
+      opacity: 0.8;
+      clip-path: polygon(0 2%, 100% 2%, 100% 5%, 0 5%);
+      animation: glitch 2s infinite;
+    }
+
+    h1::after {
+      clip-path: polygon(0 90%, 100% 90%, 100% 95%, 0 95%);
+      animation-delay: 1s;
+    }
+
+    @keyframes glitch {
+      0% {
+        transform: translate(0);
+        opacity: 0.8;
       }
-      to {
-        box-shadow: 0 0 25px #00ffff80;
+      20% {
+        transform: translate(-2px, 2px);
+        opacity: 0.5;
+      }
+      40% {
+        transform: translate(2px, -2px);
+        opacity: 0.8;
+      }
+      60% {
+        transform: translate(-2px, 1px);
+        opacity: 0.5;
+      }
+      80% {
+        transform: translate(2px, -1px);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate(0);
+        opacity: 0.8;
       }
     }
 
+    /* Texto de boas vindas digitando */
     #welcome {
-      font-size: 1.5em;
+      font-size: 1.4em;
       margin-bottom: 30px;
       white-space: nowrap;
       overflow: hidden;
-      border-right: 2px solid #00ffff;
+      border-right: 2px solid #00ffea;
       width: 0;
-      animation: typing 3s steps(30, end) forwards, blink 0.7s step-end infinite;
+      animation: typing 4s steps(22, end) forwards, blink 0.75s step-end infinite;
+      user-select: none;
     }
 
     @keyframes typing {
-      from {
-        width: 0;
-      }
-      to {
-        width: 100%;
-      }
+      from { width: 0 }
+      to { width: 14em }
     }
 
     @keyframes blink {
-      50% {
-        border-color: transparent;
-      }
+      50% { border-color: transparent }
     }
 
-    button {
-      background-color: transparent;
-      border: 2px solid #00ffff;
-      color: #00ffff;
-      padding: 12px 25px;
-      margin: 10px;
+    /* Scan horizontal bar */
+    .scan-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, #00ffea88, transparent);
+      animation: scanmove 3s linear infinite;
+      box-shadow: 0 0 10px #00ffea88;
+      z-index: 3;
+    }
+
+    @keyframes scanmove {
+      0% { left: -100%; right: 100% }
+      100% { left: 100%; right: -100% }
+    }
+
+    /* Painel log */
+    #log {
+      background: #002220cc;
+      border: 1px solid #00ffea66;
       border-radius: 10px;
+      height: 180px;
+      overflow-y: auto;
+      font-size: 0.9em;
+      padding: 15px;
+      text-align: left;
+      box-shadow: inset 0 0 10px #00ffea88;
+      font-family: monospace;
+      user-select: text;
+      white-space: pre-wrap;
+      margin-top: 15px;
+    }
+
+    /* Botão atualizar */
+    #refresh-btn {
+      margin-top: 20px;
+      background-color: transparent;
+      border: 2px solid #00ffea;
+      color: #00ffea;
+      padding: 12px 28px;
+      border-radius: 12px;
       font-size: 1.1em;
       cursor: pointer;
       transition: 0.3s;
+      user-select: none;
     }
 
-    button:hover {
-      background-color: #00ffff;
+    #refresh-btn:hover {
+      background-color: #00ffea;
       color: black;
     }
+
   </style>
 </head>
 <body>
+
+  <canvas id="cmatrix"></canvas>
+
   <div class="terminal">
-    <div id="welcome">Bem-vindo, senhor ARAUJJ...</div>
-    <button onclick="alert('Infiltrando servidores do governo...')">Infiltrar Servidor</button>
-    <button onclick="alert('Rastreamento global ativado!')">Rastreamento Global</button>
-    <button onclick="alert('Criptografia de arquivos iniciada...')">Criptografar Dados</button>
-    <button onclick="alert('Firewall comprometido. Acesso total!')">Destravar Firewall</button>
+    <div class="scan-bar"></div>
+    <h1>CENTRAL ARAUJJ</h1>
+    <div id="welcome"></div>
+
+    <div id="system-info"></div>
+
+    <button id="refresh-btn">Atualizar Dados</button>
+
+    <pre id="log"></pre>
   </div>
+
+  <script>
+    // === CMatrix Effect ===
+    const canvas = document.getElementById('cmatrix');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let columns;
+    let drops;
+
+    function setupCanvas() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+      columns = Math.floor(width / 20);
+      drops = Array(columns).fill(1);
+    }
+
+    function drawCMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.fillStyle = '#00ffea';
+      ctx.font = '20px monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = String.fromCharCode(0x30A0 + Math.random() * 96);
+        ctx.fillText(text, i * 20, drops[i] * 20);
+
+        if (drops[i] * 20 > height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setupCanvas();
+    setInterval(drawCMatrix, 45);
+    window.addEventListener('resize', () => {
+      setupCanvas();
+    });
+
+    // === Typing effect welcome message ===
+    const welcomeText = "Bem-vindo, senhor ARAUJJ...";
+    const welcomeEl = document.getElementById('welcome');
+    let currentChar = 0;
+
+    function typeWelcome() {
+      if(currentChar < welcomeText.length) {
+        welcomeEl.textContent += welcomeText.charAt(currentChar);
+        currentChar++;
+        setTimeout(typeWelcome, 90);
+      }
+    }
+    typeWelcome();
+
+    // === System Info + Fake Hacker Logs ===
+    const systemInfo = document.getElementById('system-info');
+    const log = document.getElementById('log');
+    const refreshBtn = document.getElementById('refresh-btn');
+
+    function padZero(num) {
+      return num < 10 ? '0' + num : num;
+    }
+
+    function getSystemData() {
+      const now = new Date();
+      const dateStr = `${padZero(now.getDate())}/${padZero(now.getMonth()+1)}/${now.getFullYear()}`;
+      const timeStr = `${padZero(now.getHours())}:${padZero(now.getMinutes())}:${padZero(now.getSeconds())}`;
+      const systemStatus = "Status: \x1b[32mONLINE\x1b[0m";
+      const ipFake = `IP: 192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
+
+      return `Data: ${dateStr}  Hora: ${timeStr}\n${ipFake}\n${systemStatus}`;
+    }
+
+    function updateSystemInfo() {
+      systemInfo.textContent = getSystemData();
+    }
+
+    function addLogLine(text) {
+      const timestamp = new Date().toLocaleTimeString();
+      log.textContent += `[${timestamp}] ${text}\n`;
+      log.scrollTop = log.scrollHeight;
+    }
+
+    const fakeLogs = [
+      "Conexão segura estabelecida.",
+      "Buscando vulnerabilidades...",
+      "Firewall bypass em progresso...",
+      "Rastreamento de IP ativo.",
+      "Iniciando criptografia avançada.",
+      "Analisando tráfego de rede.",
+      "Acesso root concedido.",
+      "Sistema operacional detectado: Linux Kernel 5.15",
+      "Monitorando pacotes TCP/IP.",
+      "Ajustando frequência do servidor.",
+      "Ataque DDoS mitigado.",
+      "Explorando falhas zero-day.",
+      "Varredura completa - Nenhuma ameaça encontrada.",
+      "Atualizando protocolos de segurança.",
+      "Conexão perdida, tentando reconectar...",
+      "Novo dispositivo detectado na rede."
+    ];
+
+    function startLogs() {
+      let index = 0;
+      setInterval(() => {
+        addLogLine(fakeLogs[index]);
+        index++;
+        if (index >= fakeLogs.length) index = 0;
+      }, 2800);
+    }
+
+    // Update system info every second
+    setInterval(updateSystemInfo, 1000);
+    updateSystemInfo();
+    startLogs();
+
+    // Refresh button functionality
+    refreshBtn.addEventListener('click', () => {
+      updateSystemInfo();
+      addLogLine('Dados atualizados manualmente.');
+      refreshBtn.style.transform = 'scale(1.1)';
+      setTimeout(() => {
+        refreshBtn.style.transform = 'scale(1)';
+      }, 200);
+    });
+  </script>
 </body>
 </html>
