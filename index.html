@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <title>Central ARAUJJ</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       background-color: #000;
       font-family: 'Courier New', monospace;
@@ -14,29 +18,62 @@
       justify-content: center;
       height: 100vh;
       margin: 0;
+      overflow: hidden;
     }
 
-    h1 {
-      font-size: 3em;
-      text-shadow: 0 0 15px #00ffff;
-    }
-
-    .painel {
+    .terminal {
       background-color: #111;
-      padding: 30px;
       border: 2px solid #00ffff;
-      border-radius: 20px;
-      box-shadow: 0 0 20px #00ffff80;
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: 0 0 30px #00ffff80;
+      text-align: center;
+      max-width: 90%;
+      animation: glow 1.5s infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        box-shadow: 0 0 15px #00ffff;
+      }
+      to {
+        box-shadow: 0 0 25px #00ffff80;
+      }
+    }
+
+    #welcome {
+      font-size: 1.5em;
+      margin-bottom: 30px;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid #00ffff;
+      width: 0;
+      animation: typing 3s steps(30, end) forwards, blink 0.7s step-end infinite;
+    }
+
+    @keyframes typing {
+      from {
+        width: 0;
+      }
+      to {
+        width: 100%;
+      }
+    }
+
+    @keyframes blink {
+      50% {
+        border-color: transparent;
+      }
     }
 
     button {
       background-color: transparent;
       border: 2px solid #00ffff;
       color: #00ffff;
-      padding: 15px 30px;
+      padding: 12px 25px;
       margin: 10px;
-      border-radius: 15px;
-      font-size: 1.2em;
+      border-radius: 10px;
+      font-size: 1.1em;
       cursor: pointer;
       transition: 0.3s;
     }
@@ -48,12 +85,12 @@
   </style>
 </head>
 <body>
-  <h1>🔷 CENTRAL ARAUJJ 🔷</h1>
-  <div class="painel">
-    <button onclick="alert('Modo Segurança ativado!')">Modo Segurança</button>
-    <button onclick="alert('Monitoramento em tempo real...')">Monitoramento</button>
-    <button onclick="alert('Banco de dados acessado')">Banco de Dados</button>
-    <button onclick="alert('Sistema em manutenção')">Manutenção</button>
+  <div class="terminal">
+    <div id="welcome">Bem-vindo, senhor ARAUJJ...</div>
+    <button onclick="alert('Infiltrando servidores do governo...')">Infiltrar Servidor</button>
+    <button onclick="alert('Rastreamento global ativado!')">Rastreamento Global</button>
+    <button onclick="alert('Criptografia de arquivos iniciada...')">Criptografar Dados</button>
+    <button onclick="alert('Firewall comprometido. Acesso total!')">Destravar Firewall</button>
   </div>
 </body>
 </html>
