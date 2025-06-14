@@ -194,9 +194,17 @@
       }
     }
 
+    function animate() {
+        drawCMatrix();
+        requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => {
+        setupCanvas();
+    });
+
     setupCanvas();
-    setInterval(drawCMatrix, 45);
-    window.addEventListener('resize', setupCanvas);
+    animate();   
 
     const welcomeText = "Bem-vindo, senhor ARAUJJ...";
     const welcomeEl = document.getElementById('welcome');
