@@ -2,16 +2,56 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Olho com Laser Preciso</title>
+  <title>Central Araujj</title>
   <style>
     body {
+      background: linear-gradient(to bottom, #0a0a0a, #1a1a1a);
+      font-family: Arial, sans-serif;
+      color: #00ffcc;
+      text-align: center;
+      padding: 50px;
       margin: 0;
-      background: #111;
-      height: 100vh;
       overflow: hidden;
-      cursor: crosshair;
     }
 
+    h1 {
+      font-size: 3em;
+      margin-bottom: 40px;
+      text-shadow: 0 0 10px #00ffcc;
+    }
+
+    .botao {
+      background-color: #111;
+      border: 2px solid #00ffcc;
+      border-radius: 15px;
+      color: #00ffcc;
+      font-size: 1.5em;
+      padding: 15px 30px;
+      margin: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 10px #00ffcc55;
+    }
+
+    .botao:hover {
+      background-color: #00ffcc;
+      color: #000;
+      box-shadow: 0 0 20px #00ffcc;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    footer {
+      margin-top: 60px;
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    /* ==== JOGO DO OLHO COM LASER ==== */
     .olho {
       width: 120px;
       height: 120px;
@@ -63,17 +103,47 @@
       left: 50%;
       transform: translateX(-50%);
       display: none;
+      z-index: 3;
+    }
+
+    #jogo-container {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 100vw;
     }
   </style>
 </head>
 <body>
-  <div class="olho" id="olho">
-    <div class="pupila" id="pupila"></div>
+
+  <h1>Central de Comando Araujj</h1>
+
+  <div class="container">
+    <button class="botao" onclick="iniciarJogo()">🎮 Jogo Interativo</button>
   </div>
-  <div class="laser" id="laser"></div>
-  <div class="mensagem" id="mensagem">VOCÊ FOI QUEIMADO PELO LASER!</div>
+
+  <footer>© 2025 Central Araujj</footer>
+
+  <!-- Jogo Olho -->
+  <div id="jogo-container">
+    <div class="olho" id="olho">
+      <div class="pupila" id="pupila"></div>
+    </div>
+    <div class="laser" id="laser"></div>
+    <div class="mensagem" id="mensagem">VOCÊ FOI QUEIMADO PELO LASER!</div>
+  </div>
 
   <script>
+    function iniciarJogo() {
+      document.querySelector('h1').style.display = 'none';
+      document.querySelector('.container').style.display = 'none';
+      document.querySelector('footer').style.display = 'none';
+      document.getElementById('jogo-container').style.display = 'block';
+      animarOlho();
+    }
+
     const olho = document.getElementById('olho');
     const pupila = document.getElementById('pupila');
     const laser = document.getElementById('laser');
@@ -108,7 +178,6 @@
 
       pupila.style.transform = `translate(${moveX}px, ${moveY}px)`;
 
-      // Atualiza o laser
       const distancia = Math.hypot(deltaX, deltaY);
       laser.style.left = `${olhoCentroX}px`;
       laser.style.top = `${olhoCentroY}px`;
@@ -159,8 +228,7 @@
 
       requestAnimationFrame(animarOlho);
     }
-
-    animarOlho();
   </script>
+
 </body>
 </html>
