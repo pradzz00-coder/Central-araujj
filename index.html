@@ -52,6 +52,16 @@
     }
 
     /* ==== JOGO DO OLHO COM LASER ==== */
+    #jogo-container {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 100vw;
+      background: #111;
+    }
+
     .olho {
       width: 120px;
       height: 120px;
@@ -63,6 +73,12 @@
       align-items: center;
       box-shadow: 0 0 20px red;
       z-index: 2;
+      transition: 0.2s;
+    }
+
+    .olho.perigo {
+      box-shadow: 0 0 50px red;
+      transform: scale(1.1);
     }
 
     .pupila {
@@ -71,6 +87,7 @@
       background: red;
       border-radius: 50%;
       position: absolute;
+      transition: background 0.2s;
     }
 
     .laser {
@@ -95,24 +112,40 @@
 
     .mensagem {
       color: red;
-      font-size: 3em;
+      font-size: 2em;
       font-family: Arial;
       text-align: center;
       position: absolute;
-      top: 40%;
+      top: 30%;
       left: 50%;
       transform: translateX(-50%);
       display: none;
       z-index: 3;
     }
 
-    #jogo-container {
-      display: none;
+    #btn-voltar {
       position: absolute;
-      top: 0;
-      left: 0;
-      height: 100vh;
-      width: 100vw;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 25px;
+      font-size: 1em;
+      background-color: #111;
+      border: 2px solid red;
+      color: red;
+      border-radius: 10px;
+      cursor: pointer;
+      z-index: 3;
+    }
+
+    #contador {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 1.2em;
+      color: red;
+      font-weight: bold;
+      z-index: 3;
     }
   </style>
 </head>
@@ -126,13 +159,15 @@
 
   <footer>© 2025 Central Araujj</footer>
 
-  <!-- Jogo Olho -->
+  <!-- Jogo -->
   <div id="jogo-container">
     <div class="olho" id="olho">
       <div class="pupila" id="pupila"></div>
     </div>
     <div class="laser" id="laser"></div>
     <div class="mensagem" id="mensagem">VOCÊ FOI QUEIMADO PELO LASER!</div>
+    <button id="btn-voltar" onclick="voltarCentral()">Voltar à Central</button>
+    <div id="contador">Pegos: 0</div>
   </div>
 
   <script>
@@ -144,14 +179,20 @@
       animarOlho();
     }
 
+    function voltarCentral() {
+      location.reload(); // Recarrega a página pra reiniciar tudo
+    }
+
     const olho = document.getElementById('olho');
     const pupila = document.getElementById('pupila');
     const laser = document.getElementById('laser');
     const mensagem = document.getElementById('mensagem');
+    const contadorDiv = document.getElementById('contador');
 
     let mouseX = window.innerWidth / 2;
     let mouseY = window.innerHeight / 2;
     let perseguindo = false;
+    let pegos = 0;
 
     let olhoX = window.innerWidth / 2 - 60;
     let olhoY = window.innerHeight / 2 - 60;
@@ -184,6 +225,14 @@
       laser.style.height = `2px`;
       laser.style.width = `${distancia}px`;
       laser.style.transform = `rotate(${angle}rad)`;
+
+      if (distancia < 100) {
+        olho.classList.add("perigo");
+        pupila.style.background = "#8b0000";
+      } else {
+        olho.classList.remove("perigo");
+        pupila.style.background = "red";
+      }
     }
 
     document.addEventListener('mousemove', (e) => {
@@ -222,6 +271,19 @@
           laser.style.display = "none";
           mensagem.style.display = "block";
           document.body.style.cursor = "none";
+          pegos++;
+          contadorDiv.textContent = "Pegos: " + pegos;
+          setTimeout(() => {
+            document.body.style.cursor = "crosshair";
+            mensagem.style.display = "none";
+            olho.classList.remove("explosao");
+            laser.style.display = "block";
+            olhoX = window.innerWidth / 2 - 60;
+            olhoY = window.innerHeight / 2 - 60;
+            olho.style.left = `${olhoX}px`;
+            olho.style.top = `${olhoY}px`;
+            velocidade = 0.03;
+          }, 2000);
           return;
         }
       }
